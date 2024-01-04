@@ -7,10 +7,11 @@ def pascal_triangle(n):
     n: Int, number of rows for pascal's triangle
     Returns: List of lists rpresenting pascal's tringle
     """
+    
+    triangle = [[1]]
+
     if n <= 0:
         return []
-
-    triangle = [[1]]
 
     for i in range(1, n):
         prev_row = triangle[-1]
