@@ -2,14 +2,15 @@
 '''A module for creating pascal triangle.
 '''
 
+
 def pascal_triangle(n):
     """
     Generates Pascal Triangle upto the nth row.
     Args:
     n: Int, number of rows for pascal's triangle
-    Returns: List of lists rpresenting pascal's tringle
+    Returns: List of lists rpresenting pascal's tringle.
     """
-    
+
     triangle = [[1]]
 
     if n <= 0:
