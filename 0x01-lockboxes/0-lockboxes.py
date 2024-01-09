@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+'''The module for lootboxes.
+'''
 
 
 def canUnlockAll(boxes):
