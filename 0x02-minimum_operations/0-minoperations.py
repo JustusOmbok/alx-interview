@@ -19,4 +19,7 @@ def minOperations(n):
             result += i
             n //= i
 
+        if n == 1:
+            break
+
     return result
