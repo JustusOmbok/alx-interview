@@ -10,18 +10,13 @@ def minOperations(n):
     if n <= 0:
         return 0
 
-    # Initialize an array to store the minimum number of operations
-    dp = [float('inf')] * (n + 1)
+    # Initialize the result
+    result = 0
 
-    # Base case: 0 operations needed for 1 character
-    dp[1] = 0
-
-    # Iterate from 2 to n to fill the dp array
+    # Find prime factorization and sum up the factors
     for i in range(2, n + 1):
-        # Try all possible factors of i
-        for j in range(2, i + 1):
-            if i % j == 0:
-                # If j is a factor of i, update the minimum operations
-                dp[i] = min(dp[i], dp[j] + i // j)
+        while n % i == 0:
+            result += i
+            n //= i
 
-    return dp[n] if dp[n] != float('inf') else 0
+    return result
