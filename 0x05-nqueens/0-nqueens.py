@@ -6,13 +6,14 @@ import sys
 def solve(row, column):
     """
     Solve the N Queens problem using backtracking.
-    
+
     Args:
         row (int): The current row being considered.
         column (int): The total number of queens to be placed.
 
     Returns:
-        List[List[int]]: List of solutions where each solution is represented as a list of queen positions.
+        List[List[int]]: List of solutions
+        where each solution is represented as a list of queen positions.
     """
     solver = [[]]
     for q in range(row):
@@ -30,7 +31,8 @@ def place_queen(q, column, prev_solver):
         prev_solver (List[List[int]]): Previous solutions.
 
     Returns:
-        List[List[int]]: Updated solutions after placing a queen in the current row.
+        List[List[int]]: Updated solutions
+        after placing a queen in the current row.
     """
     solver_queen = []
     for array in prev_solver:
