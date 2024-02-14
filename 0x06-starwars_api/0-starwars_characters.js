@@ -2,43 +2,30 @@
 
 const request = require('request');
 
-const movieId = process.argv[2];
+const API_URL = 'https://swapi-api.alx-tools.com/api';
 
-if (!movieId) {
-  console.error('Usage: ./0-starwars_characters.js <Movie ID>');
-  process.exit(1);
-}
+if (process.argv.length > 2) {
+  request(`${API_URL}/films/${process.argv[2]}/`, (err, _, body) => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
 
-const apiUrl = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
+    const charactersURL = JSON.parse(body).characters;
+    const charactersName = charactersURL.map(
+      url => new Promise((resolve, reject) => {
+        request(url, (promiseErr, __, charactersReqBody) => {
+          if (promiseErr) {
+            reject(promiseErr);
+          }
+          resolve(JSON.parse(charactersReqBody).name);
+        });
+      }));
 
-request(apiUrl, (error, response, body) => {
-  if (error) {
-    console.error('Error:', error);
-    process.exit(1);
-  }
-
-  if (response.statusCode !== 200) {
-    console.error('Invalid response:', response.statusCode);
-    process.exit(1);
-  }
-
-  const film = JSON.parse(body);
-  const charactersUrls = film.characters;
-
-  charactersUrls.forEach((characterUrl) => {
-    request(characterUrl, (error, response, body) => {
-      if (error) {
-        console.error('Error:', error);
-        process.exit(1);
-      }
-
-      if (response.statusCode !== 200) {
-        console.error('Invalid response:', response.statusCode);
-        process.exit(1);
-      }
-
-      const character = JSON.parse(body);
-      console.log(character.name);
-    });
+    Promise.all(charactersName)
+      .then(names => console.log(names.join('\n')))
+      .catch(allErr => console.error(allErr));
   });
-});
+} else {
+  console.error('Usage: ./0-starwars_characters.js <Movie ID>');
+}
