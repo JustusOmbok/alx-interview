@@ -3,51 +3,26 @@
 """
 
 
-def is_prime(num):
-    """Determines if number is prime."""
-    if num < 2:
-        return False
-    for i in range(2, int(num ** 0.5) + 1):
-        if num % i == 0:
-            return False
-    return True
-
-
-def sieve_with_tracking(n):
-    """Gets prime numbers."""
-    primes = [True] * (n + 1)
-    primes[0] = primes[1] = False
-    trackers = [None] * (n + 1)
-
-    for num in range(2, int(n**0.5) + 1):
-        if primes[num]:
-            for multiple in range(num * num, n + 1, num):
-                primes[multiple] = False
-                if trackers[multiple] is None:
-                    trackers[multiple] = "Maria"
-
-    for num in range(2, n + 1):
-        if primes[num] and trackers[num] is None:
-            trackers[num] = "Ben"
-
-    return trackers
-
-
 def isWinner(x, nums):
-    """Gets the winner."""
-    winners = {"Maria": 0, "Ben": 0}
-
-    for n in nums:
-        trackers = sieve_with_tracking(n)
-        num_remaining = sum(1 for player in trackers[2:] if player == "Maria")
-
-        if num_remaining % 2 == 0:
-            winners["Ben"] += 1
-        else:
-            winners["Maria"] += 1
-
-    max_wins = max(winners.values())
-    if max_wins == 0:
+    """The winner of the prime game is determined.
+    """
+    if x < 1 or not nums:
         return None
-    else:
-        return max(winners, key=winners.get)
+    maria_win, ben_win = 0, 0
+
+    n = max(nums)
+    primes = [True for _ in range(1, n + 1, 1)]
+    primes[0] = False
+    for i, is_prime in enumerate(primes, 1):
+        if i == 1 or not is_prime:
+            continue
+        for j in range(i + i, n + 1, i):
+            primes[j - 1] = False
+
+    for _, n in zip(range(x), nums):
+        primes_count = len(list(filter(lambda x: x, primes[0: n])))
+        ben_win += primes_count % 2 == 0
+        maria_win += primes_count % 2 == 1
+    if maria_win == ben_win:
+        return None
+    return 'Maria' if maria_win > ben_win else 'Ben'
