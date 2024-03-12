@@ -13,22 +13,35 @@ def is_prime(num):
     return True
 
 
-def get_primes(n):
+def sieve_with_tracking(n):
     """Gets prime numbers."""
-    primes = []
-    for i in range(2, n + 1):
-        if is_prime(i):
-            primes.append(i)
-    return primes
+    primes = [True] * (n + 1)
+    primes[0] = primes[1] = False
+    trackers = [None] * (n + 1)
+
+    for num in range(2, int(n**0.5) + 1):
+        if primes[num]:
+            for multiple in range(num * num, n + 1, num):
+                primes[multiple] = False
+                if trackers[multiple] is None:
+                    trackers[multiple] = "Maria"
+
+    for num in range(2, n + 1):
+        if primes[num] and trackers[num] is None:
+            trackers[num] = "Ben"
+
+    return trackers
 
 
 def isWinner(x, nums):
-    """Determines the winner."""
+    """Gets the winner."""
     winners = {"Maria": 0, "Ben": 0}
 
     for n in nums:
-        primes = get_primes(n)
-        if len(primes) % 2 == 0:
+        trackers = sieve_with_tracking(n)
+        num_remaining = sum(1 for player in trackers[2:] if player == "Maria")
+
+        if num_remaining % 2 == 0:
             winners["Ben"] += 1
         else:
             winners["Maria"] += 1
